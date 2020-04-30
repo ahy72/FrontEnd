@@ -1,3 +1,11 @@
 module.exports = {
-    publicPath: './'
+    publicPath: './',
+    outputDir: '../wwwroot',
+
+    configureWebpack: {
+        output: {
+            devtoolModuleFilenameTemplate: '[absolute-resource-path]',
+            devtoolFallbackModuleFilenameTemplate: '[absolute-resource-path]?[hash]'
+        }
+    }
 }
