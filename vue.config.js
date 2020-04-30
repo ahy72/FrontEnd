@@ -1,6 +1,5 @@
 module.exports = {
     publicPath: './',
-    outputDir: '../wwwroot',
 
     configureWebpack: {
         output: {
