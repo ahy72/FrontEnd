@@ -25,6 +25,12 @@ jobs:
         npm install
         npm run build --if-present
 
+    - name: 'Create Artifact'
+      uses: actions/upload-artifact@v1
+      with:
+        name: FrontEnd
+        path: dist
+
     - name: 'Deploy to Azure Web App'
       uses: azure/webapps-deploy@v1
       with:
@@ -32,8 +38,3 @@ jobs:
         slot-name: 'production'
         publish-profile: ${{ secrets.AzureAppService_PublishProfile_892d87cfef0d4606809cf23e7ac39ced }}
         package: dist
-
-    - uses: actions/upload-artifact@v1
-      with:
-        name: FrontEnd
-        path: dist
