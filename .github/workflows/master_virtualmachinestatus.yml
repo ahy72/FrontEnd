@@ -32,4 +32,4 @@ jobs:
         app-name: 'virtualmachinestatus'
         slot-name: 'production'
         publish-profile: ${{ secrets.AzureAppService_PublishProfile_c2853e88f23243e8bfd375808e4bebe4 }}
-        package: .
+        package: dist
