@@ -15,11 +15,15 @@
             <tbody>
               <tr v-for="(machine, index) in machines" :key="index">
                 <td>{{machine.name}}</td>
-                <td>{{machine.operation}}</td>
-                <td>{{machine.connectedMachine}}</td>
+                <td>{{operationToString(machine.operation)}}</td>
+                <td>{{connectedMachineToString(machine.connectedMachine)}}</td>
               </tr>
             </tbody>
           </table>
+          <button @click="refresh" class="btn btn-primary float-lg-left" :disabled="!isButtonEnabled">更新</button>
+          <p></p>
+          <p class="text-lg-left">更新時間：{{dateToString(refreshTime)}}</p>
+          <p class="text-lg-left">※更新には数十秒かかります。そのまましばらくお待ちください。</p>
         </div>
         <div class="col-lg-3"></div>
       </div>
@@ -33,7 +37,8 @@
     Vue
   } from 'vue-property-decorator';
   import {
-    VirtualMachine
+    VirtualMachine,
+    OperationStatus
   } from '../VirtualMachine';
 
   import axios from 'axios';
@@ -41,15 +46,22 @@
 
   @Component
   export default class Machiens extends Vue {
+    public dateToString(date: Date): string {
+      return moment(date).format('YYYY/MM/DD hh:mm:ss');
+    }
+
+    public operationToString(operation: OperationStatus): string {
+      return (operation == OperationStatus.Work) ? '稼働' : '停止';
+    }
+
+    public connectedMachineToString(connectedMachine: string): string {
+      return (!connectedMachine) ? '接続なし' : connectedMachine;
+    }
 
     public machines: VirtualMachine[] = [];
 
-    public toDateString(date: Date): string {
-      return moment(date).format("YYYY-MM-DD");
-    }
-
     public async created() {
-      const msg = await axios.get < VirtualMachine[] > ('/VirtualMachineStatus').then(
+      const msg = await axios.get < VirtualMachine[] > ('').then(
         (res) => res.data
       ).catch((error) => {
         console.log(error);
@@ -57,7 +69,44 @@
 
       if (msg != null) {
         this.machines = msg;
-        console.log(this.machines);
+      }
+
+      await this.updateRefreshTime();
+    }
+
+    public isButtonEnabled = true;
+
+    public async refresh() {
+      this.isButtonEnabled = false;
+      try {
+        const msg = await axios.post < VirtualMachine[] > ('Refresh').then(
+          (res) => res.data
+        ).catch((error) => {
+          console.log(error);
+        });
+
+        if (msg != null) {
+          this.machines = msg;
+        }
+
+        await this.updateRefreshTime();
+
+      } finally {
+        this.isButtonEnabled = true;
+      }
+    }
+
+    public refreshTime: Date = new Date(0);
+
+    private async updateRefreshTime() {
+      const msg = await axios.get < Date > ('RefreshTime').then(
+        (res) => res.data
+      ).catch((error) => {
+        console.log(error);
+      });
+
+      if (msg != null) {
+        this.refreshTime = msg;
       }
     }
   }

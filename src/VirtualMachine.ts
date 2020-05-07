@@ -4,7 +4,7 @@ export interface VirtualMachine {
   connectedMachine: string;
 }
 
-enum OperationStatus {
+export enum OperationStatus {
   Work = 0,
     Stop = 1,
 }
