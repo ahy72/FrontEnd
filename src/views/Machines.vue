@@ -1,9 +1,12 @@
 <template>
   <div>
     <main class="container">
+      <div v-if="message" class="row">
+        <h1 class="col-md-12 text-warning">{{message}}</h1>
+      </div>
       <div class="row">
-        <div class="col-lg-3"></div>
-        <div class="col-lg-6">
+        <div class="col-md-3"></div>
+        <div class="col-md-6">
           <table class="table container">
             <thead>
               <tr>
@@ -20,12 +23,14 @@
               </tr>
             </tbody>
           </table>
-          <button @click="refresh" class="btn btn-primary float-lg-left" :disabled="!isButtonEnabled">更新</button>
-          <p></p>
-          <p class="text-lg-left">更新時間：{{dateToString(refreshTime)}}</p>
-          <p class="text-lg-left">※更新には数十秒かかります。そのまましばらくお待ちください。</p>
+          <div class="clearfix">
+            <button v-show="!isRefreshing" @click="refresh" class="btn btn-primary float-sm-left">更新</button>
+            <button v-show="isRefreshing" class="btn btn-primary float-sm-left" disabled>更新中</button>
+          </div>
+          <p class="text-sm-left">更新時間：{{dateToString(refreshTime)}}</p>
+          <p class="text-sm-left">※更新には数十秒かかります。しばらくお待ちください。</p>
         </div>
-        <div class="col-lg-3"></div>
+        <div class="col-md-3"></div>
       </div>
     </main>
   </div>
@@ -58,55 +63,50 @@
       return (!connectedMachine) ? '接続なし' : connectedMachine;
     }
 
+    public message = '';
     public machines: VirtualMachine[] = [];
 
     public async created() {
-      const msg = await axios.get < VirtualMachine[] > ('').then(
-        (res) => res.data
-      ).catch((error) => {
+      try {
+        const msg = await axios.get < string > ('Message');
+        this.message = msg.data;
+      } catch (error) {
         console.log(error);
-      });
+      }
 
-      if (msg != null) {
-        this.machines = msg;
+      try {
+        const msg = await axios.get < VirtualMachine[] > ('');
+        this.machines = msg.data;
+      } catch (error) {
+        console.log(error);
       }
 
       await this.updateRefreshTime();
     }
 
-    public isButtonEnabled = true;
+    public isRefreshing = false;
 
     public async refresh() {
-      this.isButtonEnabled = false;
+      this.isRefreshing = true;
+
       try {
-        const msg = await axios.post < VirtualMachine[] > ('Refresh').then(
-          (res) => res.data
-        ).catch((error) => {
-          console.log(error);
-        });
-
-        if (msg != null) {
-          this.machines = msg;
-        }
-
-        await this.updateRefreshTime();
-
+        const msg = await axios.post < VirtualMachine[] > ('Refresh');
+        this.machines = msg.data;
+      } catch (error) {
+        console.log(error);
       } finally {
-        this.isButtonEnabled = true;
+        this.isRefreshing = false;
       }
     }
 
     public refreshTime: Date = new Date(0);
 
     private async updateRefreshTime() {
-      const msg = await axios.get < Date > ('RefreshTime').then(
-        (res) => res.data
-      ).catch((error) => {
+      try {
+        const msg = await axios.get < Date > ('RefreshTime');
+        this.refreshTime = msg.data;
+      } catch (error) {
         console.log(error);
-      });
-
-      if (msg != null) {
-        this.refreshTime = msg;
       }
     }
   }

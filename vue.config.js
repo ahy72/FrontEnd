@@ -1,5 +1,5 @@
 module.exports = {
-    publicPath: './',
+    publicPath: '/VirtualMachineStatus2/',
     pages: {
         index: {
             entry: 'src/main.ts',
