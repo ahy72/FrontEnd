@@ -92,6 +92,8 @@
       try {
         const msg = await axios.post < VirtualMachine[] > ('Refresh');
         this.machines = msg.data;
+
+        await this.updateRefreshTime();
       } catch (error) {
         console.log(error);
       } finally {
