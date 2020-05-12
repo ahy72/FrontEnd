@@ -1,4 +1,4 @@
-import Vue from 'vue'
+import Vue, { VNode } from 'vue'
 import App from './App.vue'
 import BootstrapVue from 'bootstrap-vue'
 import router from './router'
@@ -21,5 +21,5 @@ axios.defaults.baseURL =
 
 new Vue({
   router,
-  render: (h) => h(App),
+  render: (h): VNode => h(App),
 }).$mount('#app')

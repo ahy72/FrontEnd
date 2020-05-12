@@ -13,11 +13,11 @@ const routes: Array<RouteConfig> = [
   {
     path: '/Message',
     name: 'Message',
-    component: () => import('../views/Message.vue'),
+    component: () => import('../views/Message.vue'), // eslint-disable-line
   },
   {
     path: '*',
-    component: () => import('../views/NotFound.vue'),
+    component: () => import('../views/NotFound.vue'), // eslint-disable-line
   },
 ]
 

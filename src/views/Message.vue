@@ -3,25 +3,25 @@
     <label for="message">メッセージ</label>
     <textarea
       id="message"
+      v-model.lazy.trim="message"
       cols="30"
       rows="3"
-      v-model.lazy.trim="message"
     ></textarea>
-    <button @click="addDate" class="btn btn-secondary">日付を追加</button>
+    <button class="btn btn-secondary" @click="addDate">日付を追加</button>
     <button
       v-show="!isUpdating"
-      @click="updateMessage"
       class="btn btn-primary"
       :disabled="isDeleting"
+      @click="updateMessage"
     >
       更新
     </button>
     <button v-show="isUpdating" class="btn btn-primary" disabled>更新中</button>
     <button
       v-show="!isDeleting"
-      @click="deleteMessage"
       class="btn btn-primary"
       :disabled="isUpdating"
+      @click="deleteMessage"
     >
       削除
     </button>
@@ -39,7 +39,7 @@ import moment from 'moment'
 export default class Message extends Vue {
   public message = ''
 
-  public async created() {
+  public async created(): Promise<void> {
     try {
       const msg = await axios.get<string>('Message')
       this.message = msg.data
@@ -48,7 +48,7 @@ export default class Message extends Vue {
     }
   }
 
-  public addDate() {
+  public addDate(): void {
     this.message = `${this.dateToString(new Date())} ${this.message}`
   }
 
@@ -58,7 +58,7 @@ export default class Message extends Vue {
 
   public isUpdating = false
 
-  public async updateMessage() {
+  public async updateMessage(): Promise<void> {
     this.isUpdating = true
 
     try {
@@ -82,7 +82,7 @@ export default class Message extends Vue {
 
   public isDeleting = false
 
-  public async deleteMessage() {
+  public async deleteMessage(): Promise<void> {
     this.isDeleting = true
 
     try {

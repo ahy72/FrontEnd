@@ -28,8 +28,8 @@
           <div class="clearfix">
             <button
               v-show="!isRefreshing"
-              @click="refresh"
               class="btn btn-primary float-sm-left"
+              @click="refresh"
             >
               更新
             </button>
@@ -76,7 +76,7 @@ export default class Machiens extends Vue {
   public message = ''
   public machines: VirtualMachine[] = []
 
-  public async created() {
+  public async created(): Promise<void> {
     try {
       const msg = await axios.get<string>('Message')
       this.message = msg.data
@@ -96,7 +96,7 @@ export default class Machiens extends Vue {
 
   public isRefreshing = false
 
-  public async refresh() {
+  public async refresh(): Promise<void> {
     this.isRefreshing = true
 
     try {
@@ -115,7 +115,7 @@ export default class Machiens extends Vue {
 
   public refreshTime: Date = new Date(0)
 
-  private async updateRefreshTime() {
+  private async updateRefreshTime(): Promise<void> {
     try {
       const msg = await axios.get<Date>('RefreshTime')
       this.refreshTime = msg.data
