@@ -1,29 +1,25 @@
-# frontend2
+# フロントエンド側
 
-## Project setup
-```
-npm install
-```
+## http://systrialsvr/VirtualMachineStatus2/Machines
 
-### Compiles and hot-reloads for development
-```
-npm run serve
-```
+* 仮想マシンの稼働状況一覧を表示する
+* [更新] ボタンを押すと、[状態] と [接続] が更新される
 
-### Compiles and minifies for production
-```
-npm run build
-```
+## http://systrialsvr/VirtualMachineStatus2/Message
 
-### Run your unit tests
-```
-npm run test:unit
-```
+* 稼働状況一覧に表示するメッセージを設定する
+* 「メンテナンス中」のような用途を想定している
 
-### Lints and fixes files
-```
-npm run lint
-```
+## バックエンド側は[こちら](https://github.com/ahy72/BackEnd)
 
-### Customize configuration
-See [Configuration Reference](https://cli.vuejs.org/config/).
+## TODO (フロントエンド、バックエンド両方)
+
+* UIをかっこよく
+* リファクタする
+* コメント付ける
+* バックエンドのURL、サブディレクトリ指定、Corsなど環境に依存するパラメータを切り替え可能にする
+* SQLサーバーのID/パスワードは Secret 機能を使う
+* 単体テストを作る
+* SQLサーバーインスタンスをローカルに作って接続する (今は Azure)
+* メッセージの設定は管理者だけ行えるようにしたい
+* 仮想マシンにインストールされているソフトを確認する機能を追加したい
