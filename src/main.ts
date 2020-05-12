@@ -12,7 +12,8 @@ import 'bootstrap-vue/dist/bootstrap-vue.css'
 import axios from 'axios'
 axios.defaults.baseURL = 'http://localhost/api/VirtualMachineStatus/'
 axios.defaults.baseURL = 'http://systrialsvr/api/VirtualMachineStatus/'
-axios.defaults.baseURL = "https://virtualmachinestatusbackend.azurewebsites.net/VirtualMachineStatus/";
+axios.defaults.baseURL =
+  'https://virtualmachinestatusbackend.azurewebsites.net/VirtualMachineStatus/'
 
 // axios.defaults.responseType = "json";
 // axios.defaults.headers.common['Accept'] = "application/json";
