@@ -30,30 +30,22 @@
 </template>
 
 <script lang="ts">
-import { Component, Vue } from 'vue-property-decorator'
-
-import axios from 'axios'
-import moment from 'moment'
+import { Mixins, Component } from 'vue-mixin-decorator'
+import { virtualMachineModule } from '@/store'
+import Tools from '@/tools'
 
 @Component
-export default class Message extends Vue {
+export default class Message extends Mixins<Tools>(Tools) {
   public message = ''
 
   public async created(): Promise<void> {
-    try {
-      const msg = await axios.get<string>('Message')
-      this.message = msg.data
-    } catch (error) {
-      console.log(error)
-    }
+    await virtualMachineModule
+      .LoadMessage()
+      .then(() => (this.message = virtualMachineModule.message))
   }
 
   public addDate(): void {
     this.message = `${this.dateToString(new Date())} ${this.message}`
-  }
-
-  public dateToString(date: Date): string {
-    return moment(date).format('YYYY/MM/DD hh:mm:ss')
   }
 
   public isUpdating = false
@@ -61,23 +53,10 @@ export default class Message extends Vue {
   public async updateMessage(): Promise<void> {
     this.isUpdating = true
 
-    try {
-      const msg = await axios.post<string>(
-        'Message',
-        JSON.stringify(this.message),
-        {
-          headers: {
-            'Content-Type': 'application/json',
-          },
-        }
-      )
-
-      this.message = msg.data
-    } catch (error) {
-      console.log(error)
-    } finally {
-      this.isUpdating = false
-    }
+    await virtualMachineModule
+      .PostMessage(this.message)
+      .then(() => (this.message = virtualMachineModule.message))
+      .finally(() => (this.isUpdating = false))
   }
 
   public isDeleting = false
@@ -85,14 +64,10 @@ export default class Message extends Vue {
   public async deleteMessage(): Promise<void> {
     this.isDeleting = true
 
-    try {
-      await axios.delete<string>('Message')
-      this.message = ''
-    } catch (error) {
-      console.log(error)
-    } finally {
-      this.isDeleting = false
-    }
+    await virtualMachineModule
+      .DeleteMessage()
+      .then(() => (this.message = ''))
+      .finally(() => (this.isDeleting = false))
   }
 }
 </script>

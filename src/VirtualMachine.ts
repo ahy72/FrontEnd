@@ -1,4 +1,5 @@
 export interface VirtualMachine {
+  id: number
   name: string
   operation: OperationStatus
   connectedMachine: string

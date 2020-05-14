@@ -16,6 +16,11 @@ const routes: Array<RouteConfig> = [
     component: () => import('../views/Message.vue'), // eslint-disable-line
   },
   {
+    path: '/Error',
+    name: 'Error',
+    component: () => import('../views/Error.vue'), // eslint-disable-line
+  },
+  {
     path: '*',
     component: () => import('../views/NotFound.vue'), // eslint-disable-line
   },

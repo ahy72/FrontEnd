@@ -16,7 +16,7 @@
               </tr>
             </thead>
             <tbody>
-              <tr v-for="(machine, index) in machines" :key="index">
+              <tr v-for="machine in machines" :key="machine.id">
                 <td>{{ machine.name }}</td>
                 <td>{{ operationToString(machine.operation) }}</td>
                 <td>
@@ -53,18 +53,13 @@
 </template>
 
 <script lang="ts">
-import { Component, Vue } from 'vue-property-decorator'
+import { Mixins, Component } from 'vue-mixin-decorator'
 import { VirtualMachine, OperationStatus } from '../VirtualMachine'
-
-import axios from 'axios'
-import moment from 'moment'
+import { virtualMachineModule } from '@/store'
+import Tools from '@/tools'
 
 @Component
-export default class Machiens extends Vue {
-  public dateToString(date: Date): string {
-    return moment(date).format('YYYY/MM/DD hh:mm:ss')
-  }
-
+export default class Machiens extends Mixins<Tools>(Tools) {
   public operationToString(operation: OperationStatus): string {
     return operation == OperationStatus.Work ? '稼働' : '停止'
   }
@@ -73,58 +68,29 @@ export default class Machiens extends Vue {
     return !connectedMachine ? '接続なし' : connectedMachine
   }
 
-  public message = ''
-  public machines: VirtualMachine[] = []
+  public get message(): string {
+    return virtualMachineModule.message
+  }
+  public get machines(): VirtualMachine[] {
+    return virtualMachineModule.machines
+  }
+  public get refreshTime(): Date {
+    return virtualMachineModule.refreshTime
+  }
 
   public async created(): Promise<void> {
-    try {
-      const msg = await axios.get<string>('Message')
-      this.message = msg.data
-    } catch (error) {
-      console.log(error)
-    }
-
-    try {
-      const msg = await axios.get<VirtualMachine[]>('')
-      this.machines = msg.data
-    } catch (error) {
-      console.log(error)
-    }
-
-    await this.updateRefreshTime()
+    await virtualMachineModule.LoadMessage()
+    await virtualMachineModule.LoadMachines()
+    await virtualMachineModule.LoadRefreshTime()
   }
 
   public isRefreshing = false
 
   public async refresh(): Promise<void> {
     this.isRefreshing = true
-
-    try {
-      const msg = await axios.post<VirtualMachine[]>('Refresh')
-      this.machines = msg.data
-
-      if (msg != null) {
-        await this.updateRefreshTime()
-      }
-    } catch (error) {
-      console.log(error)
-    } finally {
-      this.isRefreshing = false
-    }
-  }
-
-  public refreshTime: Date = new Date(0)
-
-  private async updateRefreshTime(): Promise<void> {
-    try {
-      const msg = await axios.get<Date>('RefreshTime')
-      this.refreshTime = msg.data
-    } catch (error) {
-      console.log(error)
-    }
+    await virtualMachineModule
+      .Refresh()
+      .finally(() => (this.isRefreshing = false))
   }
 }
 </script>
-
-<!-- Add "scoped" attribute to limit CSS to this component only -->
-<style scoped></style>

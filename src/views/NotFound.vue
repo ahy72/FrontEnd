@@ -1,8 +1,18 @@
 <template>
-  <div>
-    <h3 class="text-danger">HTTP エラー 404.0 - Not Found</h3>
-    <h4>
-      探しているリソースは削除されたか、名前が変更されたか、または一時的に使用不可能になっています。
-    </h4>
-  </div>
+  <error :details="details"></error>
 </template>
+
+<script lang="ts">
+import { Component, Vue } from 'vue-property-decorator'
+import Error from '../views/Error.vue'
+
+@Component({
+  components: {
+    Error,
+  },
+})
+export default class NotFound extends Vue {
+  details =
+    '404.0 - Not Found\n探しているリソースは削除されたか、名前が変更されたか、または一時的に使用不可能になっています。'
+}
+</script>
