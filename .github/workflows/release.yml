@@ -27,7 +27,7 @@ jobs:
     - name: zip release
       run: |
         cd dist
-        zip -r dist *
+        zip -r ../dist *
 
     - name: create release
       id: create_release
