@@ -26,7 +26,8 @@ jobs:
 
     - name: zip release
       run: |
-        zip --junk-paths dist README.md
+        cd dist
+        zip -r dist *
 
     - name: create release
       id: create_release
