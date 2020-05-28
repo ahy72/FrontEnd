@@ -1,0 +1,35 @@
+# This is a basic workflow to help you get started with Actions
+
+name: Artifact
+
+on:
+  push:
+    branches:
+      - master
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+    - uses: actions/checkout@v2
+
+    - uses: borales/actions-yarn@v2.0.0
+      name: yarn install
+      with:
+        cmd: install
+
+    - uses: borales/actions-yarn@v2.0.0
+      name: yarn build
+      with:
+        cmd: build
+
+    - uses: borales/actions-yarn@v2.0.0
+      name: yarn test:unit
+      with:
+        cmd: test:unit
+
+    - name: Upload Artifact
+      uses: actions/upload-artifact@v2
+      with:
+        path: dist
