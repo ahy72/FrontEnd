@@ -24,10 +24,10 @@ jobs:
       with:
         cmd: build
 
-    - uses: borales/actions-yarn@v2.0.0
-      name: yarn test:unit
-      with:
-        cmd: test:unit
+#    - uses: borales/actions-yarn@v2.0.0
+#      name: yarn test:unit
+#      with:
+#        cmd: test:unit
 
     - name: Upload Artifact
       uses: actions/upload-artifact@v2
