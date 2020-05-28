@@ -24,15 +24,9 @@ jobs:
       with:
         cmd: build
 
-#    - uses: borales/actions-yarn@v2.0.0
-#      name: yarn test:unit
-#      with:
-#        cmd: test:unit
-
     - name: zip release
       run: |
-        cd dist
-        zip release *.*
+        zip --junk-paths dist README.md
 
     - name: create release
       id: create_release
