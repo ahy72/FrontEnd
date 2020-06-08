@@ -29,7 +29,19 @@ jobs:
 #      with:
 #        cmd: test:unit
 
-    - name: Upload Artifact
-      uses: actions/upload-artifact@v2
+    # - name: Upload Artifact
+    #   uses: actions/upload-artifact@v2
+    #   with:
+    #     path: dist
+
+    - name: issue-bot
+      # if: failure()
+      uses: imjohnbo/issue-bot@v2
       with:
-        path: dist
+        labels: bug
+        title: CI Faliure - ${{ github.ref }}
+        body: プッシュされたコミット - ${{ github }}
+        pinned: false
+        close-previous: false
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
