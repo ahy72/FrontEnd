@@ -48,6 +48,13 @@ jobs:
           github.event.commits[0].sha - ${{ github.event.commits[0].sha }}
           github.event.commits[0].message - ${{ github.event.commits[0].message }}
           github.event.commits[0].author.name - ${{ github.event.commits[0].author.name }}
+          github.event.commits[0].author.avatar_url - ${{ github.event.commits[0].author.avatar_url }}
+          github.event.head_commit.sha - ${{ github.event.commits[0].sha }}
+          github.event.head_commit.message - ${{ github.event.head_commit.message }}
+          github.event.head_commit.author.name - ${{ github.event.head_commit.author.name }}
+          github.event.head_commit.author.avatar_url - ${{ github.event.head_commit.author.avatar_url }}
+          <img src="github.event.sender.avatar_url" width="16x16">
+          <img src="github.event.sender.avatar_url" width="32x32">
         pinned: false
         close-previous: false
       env:
