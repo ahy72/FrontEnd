@@ -43,11 +43,11 @@ jobs:
         body: |
           github.event.pusher.name - ${{ github.event.pusher.name }}
           github.sha - ${{ github.sha }}
-          github.sender.login - ${{ github.sender.login }}
-          github.sender.avatar_url - ${{ github.sender.avatar_url }}
-          github.github.commits[0].sha - ${{ github.commits[0].sha }}
-          github.commits[0].message - ${{ github.commits[0].message }}
-          github.commits[0].author.name - ${{ github.commits[0].author.name }}
+          github.event.sender.login - ${{ github.event.sender.login }}
+          github.event.sender.avatar_url - ${{ github.event.sender.avatar_url }}
+          github.event.commits[0].sha - ${{ github.event.commits[0].sha }}
+          github.event.commits[0].message - ${{ github.event.commits[0].message }}
+          github.event.commits[0].author.name - ${{ github.event.commits[0].author.name }}
         pinned: false
         close-previous: false
       env:
